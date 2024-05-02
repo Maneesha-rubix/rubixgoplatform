@@ -33,7 +33,7 @@ const (
 )
 
 const (
-	version string = "0.0.15"
+	version string = "0.0.14"
 )
 const (
 	VersionCmd                     string = "-v"
@@ -77,6 +77,7 @@ const (
 	GetTokenBlock                  string = "gettokenblock"
 	GetSmartContractData           string = "getsmartcontractdata"
 	ReleaseAllLockedTokensCmd      string = "releaseAllLockedTokens"
+	GetTransInfoCmd                string = "gettxninfo"
 )
 
 var commands = []string{VersionCmd,
@@ -121,6 +122,7 @@ var commands = []string{VersionCmd,
 	DumpSmartContractTokenChainCmd,
 	GetTokenBlock,
 	GetSmartContractData,
+	GetTransInfoCmd,
 }
 var commandsHelp = []string{"To get tool version",
 	"To get help",
@@ -237,6 +239,7 @@ type Command struct {
 	smartContractData  string
 	executorAddr       string
 	latest             bool
+	userAddr           string
 }
 
 func showVersion() {
@@ -428,6 +431,7 @@ func Run(args []string) {
 	flag.StringVar(&cmd.smartContractData, "sctData", "data", "Smart contract execution info")
 	flag.StringVar(&cmd.executorAddr, "executorAddr", "", "Smart contract Executor Address")
 	flag.BoolVar(&cmd.latest, "latest", false, "flag to set latest")
+	flag.StringVar(&cmd.userAddr, "userAddr", "", "User Address")
 
 	if len(os.Args) < 2 {
 		fmt.Println("Invalid Command")
@@ -570,6 +574,8 @@ func Run(args []string) {
 		cmd.executeSmartcontract()
 	case ReleaseAllLockedTokensCmd:
 		cmd.releaseAllLockedTokens()
+	case GetTransInfoCmd:
+		cmd.getTransInfo()
 	default:
 		cmd.log.Error("Invalid command")
 	}

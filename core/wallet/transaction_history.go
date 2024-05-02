@@ -107,6 +107,16 @@ func (w *Wallet) GetTransactionByDIDAndDateRange(did string, startDate time.Time
 	return td, nil
 }
 
+func (w *Wallet) GetTxnInfo(txnId string, didstr string) (TransactionDetails, error) {
+	var trans_info TransactionDetails
+	err := w.s.Read(TransactionStorage, &trans_info, "transaction_id=? AND sender_did=? OR receiver_did=?", txnId, didstr, didstr)
+	if err != nil {
+		w.log.Error("No records found for transactio id ", txnId, "err", err)
+		return trans_info, err
+	}
+	return trans_info, nil
+}
+
 // func (w *Wallet) GetTransactionByDate(date string) ([]TransactionDetails, error) {
 // 	var th []TransactionHistory
 // 	var td []TransactionDetails
